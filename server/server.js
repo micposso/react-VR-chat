@@ -16,6 +16,10 @@ const io = socketio(server);
 // use socketio to register user connect and disconnect, the connection is managed from inside the socket, now its ready to be implemented in the frontend
 io.on('connection', (socket) => {
   console.log("We have a new connection ");
+  // listen for the event that is being emmited, reference by string
+  socket.on('join', ({ name, room }) => {
+    console.log(name, room);
+  });
 
   io.on('disconnect', () => {
     console.log("User has left");

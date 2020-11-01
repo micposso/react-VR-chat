@@ -25,7 +25,10 @@ const ChatComponent = ( {location} ) => {
     // pass the data from url saved in variables to the useState
     setName(name);
     setRoom(room);
-    console.log(socket);
+    //console.log(socket);
+    // emit event to the endpoint to be cought by the server, pass string and then object with data
+    socket.emit('join', { name, room });
+
   }, [ENDPOINT, location.search]);
   // above, need to pass an argument to userEffect to only run when parameters change, this way. socket only runs once
   return (
