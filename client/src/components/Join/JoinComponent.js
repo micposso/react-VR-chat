@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import './join.css';
+
 // hooks allow you to use lifecycle methods on functional components insted of class based components. easier to write less code and impoved readability
 
 const JoinComponent = () => {
