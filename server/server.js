@@ -17,8 +17,15 @@ const io = socketio(server);
 io.on('connection', (socket) => {
   console.log("We have a new connection ");
   // listen for the event that is being emmited, reference by string
-  socket.on('join', ({ name, room }) => {
+  socket.on('join', ({ name, room }, callback) => {
+    // now we have access on the backend to this info
     console.log(name, room);
+    // trigger a response when the join event is detected
+    // do some error fake handling here
+    const error = false;
+    if(error){
+    callback({ error: 'error'});
+    }
   });
 
   io.on('disconnect', () => {
