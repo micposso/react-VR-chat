@@ -30,6 +30,13 @@ const ChatComponent = ( {location} ) => {
     // grab error object from server socket io connection callback
     socket.emit('join', { name, room }, ({ error }) => { alert(error);});
 
+    // unmount useeffect hook, this will be triggered when the chat component is unmounted
+    return () => {
+      socket.emit('disconnect');
+
+      socket.off();
+    }
+
   }, [ENDPOINT, location.search]);
   // above, need to pass an argument to userEffect to only run when parameters change, this way. socket only runs once
   return (
