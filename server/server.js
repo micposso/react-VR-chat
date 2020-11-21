@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
     const { error, user } = AddUser({ id: socket.id, name, room });
 
     if(error) return callback(error);
-    // now we have access on the backend to this info
+    // now we have access on the backend to this info and are emmiting it to the frontend
     socket.emit('message', { user: 'admin', text: `${user.name}, welcome to the room ${user.room}`});
 
     // broadcast sends a message to everyone. use when user joins chat
@@ -37,7 +37,12 @@ io.on('connection', (socket) => {
 
   });
 
-  io.on('disconnect', () => {
+  socket.on('sendMessage', (message, callback) => {
+    const user = getUser(socket.id);
+    io.to(user.room).emit('message', { user: user.name, text: message});
+  });
+
+  socket.on('disconnect', () => {
     console.log("User has left");
   })
 });

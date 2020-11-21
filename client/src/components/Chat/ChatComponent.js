@@ -10,6 +10,8 @@ const ChatComponent = ( {location} ) => {
   // use hook to pass url parameters in useEffect as state of the component
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
+  const [message] = useState('');
+  const [messages, setMessages] = useState([]);
   // set endpoint, server must be running
   const ENDPOINT = 'localhost:5000';
 
@@ -39,6 +41,17 @@ const ChatComponent = ( {location} ) => {
 
   }, [ENDPOINT, location.search]);
   // above, need to pass an argument to userEffect to only run when parameters change, this way. socket only runs once
+
+  // user hook to handle message
+  useEffect(() => {
+    socket.on('message', (message) => {
+    setMessages([...messages, message]);
+    });
+  }, [messages]);
+
+  // function for sending message
+
+
   return (
     <h1>Chat</h1>
   )
