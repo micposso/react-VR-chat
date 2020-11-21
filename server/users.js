@@ -26,16 +26,21 @@ exports.addUser = ({ id, name, room }) => {
 }
 
 // need to remove users
-const removeUser = () => {
+const removeUser = (id) => {
+  // findIndex returns the index of the first element that satisfies the test function
+  const index = users.findIndex((user) => user.id === id);
+
+  if(index !== -1) {
+    // remove the user from the array
+    return users.splice(index, 1)[0];
+  }
 
 }
 
 // need to get user
-const getUser = () => {
-
-}
+const getUser = (id) => users.find((user) => user.id === id);
 
 // need to get users in specific room
-const getUsersInRoom = () => {
+const getUsersInRoom = (room) => users.filter((user) => user.room === room);
 
-}
+module.exports = { addUser, removeUser, getUsersInRoom, getUsersInRoom };
