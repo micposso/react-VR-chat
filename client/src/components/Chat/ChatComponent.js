@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 // use to retrieve data from the URL
 import queryString from 'query-string';
 import io from 'socket.io-client';
-
+import InfoBar from '../Infobar/InfoBar.js';
 import './chat.css';
 
 // set socket variable that will change
