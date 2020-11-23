@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 // use to retrieve data from the URL
 import queryString from 'query-string';
 import io from 'socket.io-client';
+
+import './chat.css';
+
 // set socket variable that will change
 let socket;
 
@@ -65,7 +68,7 @@ const ChatComponent = ( {location} ) => {
   console.log(message, messages);
 
   return (
-    <div className="auterContainer">
+    <div className="outerContainer">
       <div className="container">
         <input 
         value={message} 
