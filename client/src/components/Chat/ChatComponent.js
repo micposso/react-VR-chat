@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 // use to retrieve data from the URL
 import queryString from 'query-string';
 import io from 'socket.io-client';
+
+import './chat.css';
+
 // set socket variable that will change
 let socket;
 
@@ -10,6 +13,8 @@ const ChatComponent = ( {location} ) => {
   // use hook to pass url parameters in useEffect as state of the component
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
+  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState([]);
   // set endpoint, server must be running
   const ENDPOINT = 'localhost:5000';
 
@@ -28,7 +33,11 @@ const ChatComponent = ( {location} ) => {
     //console.log(socket);
     // emit event to the endpoint to be cought by the server, pass string and then object with data
     // grab error object from server socket io connection callback
-    socket.emit('join', { name, room }, ({ error }) => { alert(error);});
+    socket.emit('join', { name, room }, (error) => {
+      if(error) {
+        alert(error); 
+      } 
+    });
 
     // unmount useeffect hook, this will be triggered when the chat component is unmounted
     return () => {
@@ -39,8 +48,36 @@ const ChatComponent = ( {location} ) => {
 
   }, [ENDPOINT, location.search]);
   // above, need to pass an argument to userEffect to only run when parameters change, this way. socket only runs once
+
+  // user hook to handle message
+  useEffect(() => {
+    socket.on('message', (message) => {
+    setMessages([...messages, message]);
+    });
+  }, [messages]);
+
+  // function for sending message
+  const sendMessage = (event) => {
+    event.preventDefault();
+
+    if(message) {
+      socket.emit('sendMessage', message, () => setMessage(''));
+    }
+  }
+
+  console.log(message, messages);
+
   return (
-    <h1>Chat</h1>
+    <div className="outerContainer">
+      <div className="container">
+        <InfoBar />
+        <input 
+        value={message} 
+        onChange={(event) => setMessage(event.target.value) } type="text"
+        onKeyPress={event => event.key === 'Enter' ? sendMessage(event) : null}
+        />
+      </div>
+    </div>
   )
 }
 

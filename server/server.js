@@ -2,7 +2,7 @@ const express = require('express');
 const socketio = require('socket.io');
 const http = require('http');
 const router = require('./router');
-
+const { addUser, removeUser, getUser, getUsersInRoom } = require('./users.js');
 // declare port
 const PORT = process.env.PORT || 5000;
 
@@ -15,20 +15,34 @@ const io = socketio(server);
 
 // use socketio to register user connect and disconnect, the connection is managed from inside the socket, now its ready to be implemented in the frontend
 io.on('connection', (socket) => {
+
   console.log("We have a new connection ");
   // listen for the event that is being emmited, reference by string
   socket.on('join', ({ name, room }, callback) => {
-    // now we have access on the backend to this info
+    // error log
+    const { error, user } = addUser({ id: socket.id, name, room });
+
+    if(error) return callback(error);
+    // now we have access on the backend to this info and are emmiting it to the frontend
+    socket.emit('message', { user: 'admin', text: `${user.name}, welcome to the room ${user.room}`});
+
+    // broadcast sends a message to everyone. use when user joins chat
+    socket.broadcast.to(user.room).emit('message', { user: 'admin', text: `${user.name} has joined`});
+
     console.log(name, room);
-    // trigger a response when the join event is detected
-    // do some error fake handling here
-    const error = false;
-    if(error){
-    callback({ error: 'error'});
-    }
+
+    socket.join(user.room);
+    // run the callback with no error
+    callback();
+
   });
 
-  io.on('disconnect', () => {
+  socket.on('sendMessage', (message, callback) => {
+    const user = getUser(socket.id);
+    io.to(user.room).emit('message', { user: user.name, text: message});
+  });
+
+  socket.on('disconnect', () => {
     console.log("User has left");
   })
 });
