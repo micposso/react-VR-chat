@@ -20,7 +20,7 @@ io.on('connection', (socket) => {
   // listen for the event that is being emmited, reference by string
   socket.on('join', ({ name, room }, callback) => {
     // error log
-    const { error, user } = AddUser({ id: socket.id, name, room });
+    const { error, user } = addUser({ id: socket.id, name, room });
 
     if(error) return callback(error);
     // now we have access on the backend to this info and are emmiting it to the frontend

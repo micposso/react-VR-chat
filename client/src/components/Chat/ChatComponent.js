@@ -10,7 +10,7 @@ const ChatComponent = ( {location} ) => {
   // use hook to pass url parameters in useEffect as state of the component
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
-  const [message] = useState('');
+  const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   // set endpoint, server must be running
   const ENDPOINT = 'localhost:5000';
@@ -30,7 +30,11 @@ const ChatComponent = ( {location} ) => {
     //console.log(socket);
     // emit event to the endpoint to be cought by the server, pass string and then object with data
     // grab error object from server socket io connection callback
-    socket.emit('join', { name, room }, ({ error }) => { alert(error);});
+    socket.emit('join', { name, room }, (error) => {
+      if(error) {
+        alert(error); 
+      } 
+    });
 
     // unmount useeffect hook, this will be triggered when the chat component is unmounted
     return () => {
@@ -50,10 +54,26 @@ const ChatComponent = ( {location} ) => {
   }, [messages]);
 
   // function for sending message
+  const sendMessage = (event) => {
+    event.preventDefault();
 
+    if(message) {
+      socket.emit('sendMessage', message, () => setMessage(''));
+    }
+  }
+
+  console.log(message, messages);
 
   return (
-    <h1>Chat</h1>
+    <div className="auterContainer">
+      <div className="container">
+        <input 
+        value={message} 
+        onChange={(event) => setMessage(event.target.value) } type="text"
+        onKeyPress={event => event.key === 'Enter' ? sendMessage(event) : null}
+        />
+      </div>
+    </div>
   )
 }
 

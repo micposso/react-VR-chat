@@ -3,7 +3,7 @@ const users = [];
 // need a function that adds users
 // take 3 params, ID, name and room
 
-exports.addUser = ({ id, name, room }) => {
+const addUser = ({ id, name, room }) => {
   // need to sanitize data
   name = name.trim().toLowerCase();
   room = room.trim().toLowerCase();
