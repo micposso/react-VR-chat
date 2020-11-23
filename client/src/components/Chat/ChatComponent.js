@@ -70,6 +70,7 @@ const ChatComponent = ( {location} ) => {
   return (
     <div className="outerContainer">
       <div className="container">
+        <InfoBar />
         <input 
         value={message} 
         onChange={(event) => setMessage(event.target.value) } type="text"
