@@ -3,9 +3,14 @@ import React from 'react';
 import ScrollToBottom from 'react-scroll-to-bottom';
 
 
-const Messages = () => (
+const Messages = ({messages}) => (
   <ScrollToBottom>
-
+    {
+      messages.map((message, i) => 
+      <div key={i}>
+        {message}
+      </div>)
+    }
 
   </ScrollToBottom>
 );
