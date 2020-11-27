@@ -5,6 +5,7 @@ import queryString from 'query-string';
 import io from 'socket.io-client';
 import InfoBar from '../Infobar/InfoBar.js';
 import Input from '../Input/InputComponent.js';
+import Messages from '../Messages/MessagesComponent.js';
 import './chat.css';
 
 // set socket variable that will change
@@ -72,6 +73,7 @@ const ChatComponent = ( {location} ) => {
     <div className="outerContainer">
       <div className="container">
         <InfoBar room={room} />
+        <Messages />
         <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
       </div>
     </div>
