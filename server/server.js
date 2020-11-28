@@ -29,9 +29,8 @@ io.on('connection', (socket) => {
     // broadcast sends a message to everyone. use when user joins chat
     socket.broadcast.to(user.room).emit('message', { user: 'admin', text: `${user.name} has joined`});
 
-    console.log(name, room);
+    io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
 
-    socket.join(user.room);
     // run the callback with no error
     callback();
 
@@ -39,7 +38,13 @@ io.on('connection', (socket) => {
 
   socket.on('sendMessage', (message, callback) => {
     const user = getUser(socket.id);
-    io.to(user.room).emit('message', { user: user.name, text: message});
+
+    console.log(user);
+
+    //io.to(user.room).emit('message', { user: user.name, text: message});
+
+    callback();
+
   });
 
   socket.on('disconnect', () => {
