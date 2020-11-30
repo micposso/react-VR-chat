@@ -3,7 +3,10 @@ import './message.css';
 
 const Message = ({message: { user, text }, name}) => {
   let isSentByCurrentUser = false;
+
   const trimmedName = name.trim().toLowerCase();
+  
+  console.log('from message component', trimmedName);
 
   if( user === trimmedName ) {
     isSentByCurrentUser = true;
@@ -25,10 +28,10 @@ const Message = ({message: { user, text }, name}) => {
         <div className="messageBox backgroundLight">
           <p className="messageText colorDark">{text}</p>
         </div>
-        <p className="sentText">{trimmedName}</p>
+        <p className="sentText pl-10">{trimmedName}</p>
       </div>
     )
-  )
+  );
 
 }
 
