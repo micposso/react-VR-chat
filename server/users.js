@@ -13,6 +13,8 @@ const addUser = ({ id, name, room }) => {
   // create a condition that if a user is entering room with the same name as another user in the room, forbidden.
   const existUser = users.find(( user ) => user.room === room && user.name === name );
   // if user exists, then end the function and return error
+  if(!name || !room) return { error: 'Username and room are required.' };
+
   if(existUser) {
     return { error: "user name is taken" };
   }

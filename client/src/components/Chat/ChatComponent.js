@@ -3,20 +3,25 @@ import React, { useState, useEffect } from 'react';
 // use to retrieve data from the URL
 import queryString from 'query-string';
 import io from 'socket.io-client';
+
 import InfoBar from '../Infobar/InfoBar.js';
+import Input from '../Input/InputComponent.js';
+import Messages from '../Messages/MessagesComponent.js';
+
 import './chat.css';
 
 // set socket variable that will change
+const ENDPOINT = 'localhost:5000';
 let socket;
 
 const ChatComponent = ( {location} ) => {
   // use hook to pass url parameters in useEffect as state of the component
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
+  const [users, setUsers] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   // set endpoint, server must be running
-  const ENDPOINT = 'localhost:5000';
 
 
   useEffect(() => {
@@ -51,31 +56,33 @@ const ChatComponent = ( {location} ) => {
 
   // user hook to handle message
   useEffect(() => {
-    socket.on('message', (message) => {
-    setMessages([...messages, message]);
+    socket.on('message', message => {
+    setMessages(messages => [...messages, message]);
     });
-  }, [messages]);
+
+    socket.on("roomData", ({ users }) => {
+      setUsers(users);
+    });
+  }, []);
 
   // function for sending message
   const sendMessage = (event) => {
     event.preventDefault();
 
     if(message) {
+      console.log('from chat', message);
       socket.emit('sendMessage', message, () => setMessage(''));
     }
   }
 
-  console.log(message, messages);
+  console.log('from component', message, messages);
 
   return (
     <div className="outerContainer">
       <div className="container">
-        <InfoBar />
-        <input 
-        value={message} 
-        onChange={(event) => setMessage(event.target.value) } type="text"
-        onKeyPress={event => event.key === 'Enter' ? sendMessage(event) : null}
-        />
+        <InfoBar room={room} />
+        <Messages messages={messages} name={name} />
+        <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
       </div>
     </div>
   )
