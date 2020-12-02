@@ -23,7 +23,7 @@ const addUser = ({ id, name, room }) => {
   // add to array
   users.push(user);
   // return user object
-  console.log(user);
+  console.log('from serve', user);
   return { user };
 }
 
