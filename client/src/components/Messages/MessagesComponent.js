@@ -3,6 +3,8 @@ import React from 'react';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import Message from '../Message/MessageComponent.js'
 
+import './messages.css';
+
 const Messages = ({messages, name}) => (
   <ScrollToBottom className="messages">
     {
