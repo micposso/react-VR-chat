@@ -70,7 +70,7 @@ const ChatComponent = ( {location} ) => {
     event.preventDefault();
 
     if(message) {
-      console.log('from chat', message);
+      console.log('from chat component', message);
       socket.emit('sendMessage', message, () => setMessage(''));
     }
   }
